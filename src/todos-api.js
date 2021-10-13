@@ -1,5 +1,5 @@
 import request from 'superagent';
-const API_URL = 'https://lab-12-be-dylan.herokuapp.com';
+const API_URL = 'https://lab-12-be-dylan.herokuapp.com'; //'http://localhost:3001'; // 
 
 export async function signIn(email, password) {
     let result = {
@@ -66,5 +66,21 @@ export async function addTodo(todo, token) {
         .post(`${API_URL}/api/todos`)
         .set('Authorization', token)
         .send({ todo });
+    return response.body;
+}
+
+export async function updateTodo(todo, token) {
+    let response = await request
+        .put(`${API_URL}/api/todos`)
+        .set('Authorization', token)
+        .send(todo);
+    return response.body;
+}
+
+export async function deleteTodo(todoId, token) {
+    let response = await request
+        .delete(`${API_URL}/api/todos`)
+        .set('Authorization', token)
+        .send({ todo_id: todoId});
     return response.body;
 }

@@ -1,74 +1,95 @@
+import { Button, TextField } from '@mui/material';
+import { email } from '@sideway/address';
 import React, { Component } from 'react'
 import { signIn, signUp } from '../todos-api.js'
 
 export default class AuthPage extends Component {
 
-    state = {
-        email: '',
-        password: '',
-        badCreds: false,
-        error: false
+  state = {
+    email: '',
+    password: '',
+    badCreds: false,
+    error: false,
+    validEmail: true
+  }
+
+  handleAuthResult(result) {
+    if (!result.error && !result.badCreds) {
+      this.props.handleTokenChange(result.token)
+      this.props.history.push('/todos');
+    } else {
+      this.setState({ ...result });
     }
 
-    handleAuthResult(result) {
-        if(!result.error && !result.badCreds) {
-            this.props.handleTokenChange(result.token)
-            this.props.history.push('/todos');
-        } else {
-            this.setState({ ...result });
-        }
+  }
+  handleSignin = async (e) => {
+    const { email, password, validEmail } = this.state;
+    if (!validEmail) return;
+    const result = await signIn(email, password);
+    this.handleAuthResult(result);
+  }
 
-    }
-    handleSignin = async (e) => {
-        const { email, password } = this.state;
-        const result = await signIn(email, password);
-        this.handleAuthResult(result);
-    }
+  handleSignup = async (e) => {
+    const { email, password, validEmail } = this.state;
+    if (!validEmail) return;
+    const result = await signUp(email, password);
+    this.handleAuthResult(result);
+  }
 
-    handleSignup = async (e) => {
-        const { email, password } = this.state;
-        const result = await signUp(email, password);
-        this.handleAuthResult(result);
-    }
+  clearErrorState = () => {
+    this.setState({ error: false, badCreds: false })
+  }
 
-    clearErrorState = () => {
-        this.setState({ error: false, badCreds: false })
-    }
+  handleEmailChange = (e) => {
+    const input = e.target.value;
+    const validEmail = email.isValid(input);
+    this.setState({ email: input, validEmail });
+    this.clearErrorState();
+  }
 
-    handleEmailChange = (e) => {
-        this.setState({ email: e.target.value });
-        this.clearErrorState();
-    }
+  handlePasswordChange = (e) => {
+    this.setState({ password: e.target.value });
+    this.clearErrorState();
+  }
 
-    handlePasswordChange = (e) => {
-        this.setState({ password: e.target.value });
-        this.clearErrorState();
-    }
-
-    render() {
-        const {
-            email,
-            password,
-            error,
-            badCreds
-        } = this.state;
-        return (
-            <div>
-                {error ? "Error" : ""}
-                {badCreds ? "Bad Credentials" : ""}
-                <form onSubmit={ this.handleSubmit }>
-                    <label>
-                        Email:
-                        <input name="email" value={ email } onChange={ this.handleEmailChange } />
-                    </label>
-                    <label>
-                        Password:
-                        <input type="password" name="password" value={ password } onChange={ this.handlePasswordChange } />
-                    </label>
-                    <input type="button" value="Sign In" onClick={ this.handleSignin }/>
-                    <input type="button" value="Sign Up" onClick={ this.handleSignup }/>
-                </form>
-            </div>
-        )
-    }
+  render() {
+    const {
+      email,
+      password,
+      error,
+      badCreds,
+      validEmail
+    } = this.state;
+    return (
+      <div className="auth-div">
+        <div className="auth-error-div">
+          <span className="not-error">Please Sign In to Continue</span>
+          <span>{badCreds ? "Invalid Credentials" : " "}</span>
+          <span>{error ? "Error" : " "}</span>
+        </div>
+        <form onSubmit={this.handleSubmit} className="auth-form">
+          <TextField label="Email"
+            variant="outlined"
+            value={email}
+            error={!validEmail}
+            onChange={this.handleEmailChange}
+            helperText={validEmail ? " " : "Invalid Email"}
+            size="small"
+          />
+          <TextField
+            label="Password"
+            type="password"
+            value={password}
+            onChange={this.handlePasswordChange}
+            herlperText=" "
+            size="small"
+          />
+          <div>
+            <Button onClick={this.handleSignin} >Sign In</Button>
+            <Button onClick={this.handleSignup} >Sign Up</Button>
+          </div>
+        </form>
+      </div>
+    )
+  }
 }

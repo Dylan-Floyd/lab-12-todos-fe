@@ -1,3 +1,27 @@
+body {
+  background-color: rgb(36, 42, 56);
+  color: white;
+}
+
+.nav {
+  background-color: rgba(0, 0, 0, .5);
+  padding: 10px;
+  box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, .2);
+}
+
+.nav > a {
+  margin: 10px 10px;
+  margin-bottom: 50px;
+  text-decoration: none;
+  color: white;
+  transition: .1s color ease-in-out;
+}
+
+.nav > a:hover {
+  text-decoration: underline;
+  color:rgb(176, 213, 255)
+}
+
 .App {
   text-align: center;
 }
@@ -35,4 +59,59 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.todos-div {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  margin: 50px auto;
+  background-color: #1d2535;
+  color: white;
+  padding: 20px;
+  border: 1px lightblue solid;
+  border-radius: 10px;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, .5);
+}
+
+.input-div {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  column-gap: 5px;
+}
+
+.auth-div {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  margin: 50px auto;
+  background-color: #1d2535;
+  color: white;
+  padding: 10px 20px;
+  border: 1px lightblue solid;
+  border-radius: 10px;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, .5);
+}
+
+.auth-error-div {
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  color: rgb(244, 67, 54)
+}
+
+.auth-error-div > span {
+  margin: 5px 0px;
+}
+
+.not-error {
+  color: white;
+}
+
+.auth-form {
+  display: grid;
+  grid-template-rows: 1fr 1fr .5fr;
+  row-gap: 10px;
 }

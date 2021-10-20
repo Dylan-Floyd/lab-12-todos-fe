@@ -27,21 +27,6 @@ export default class AuthPage extends Component {
     if (!validEmail) return;
     const result = await signIn(email, password);
     this.handleAuthResult(result);
-  }
-
-  handleSignup = async (e) => {
-    const { email, password, validEmail } = this.state;
-    if (!validEmail) return;
-    const result = await signUp(email, password);
-    this.handleAuthResult(result);
-  }
-
-  clearErrorState = () => {
-    this.setState({ error: false, badCreds: false })
-  }
-
-  handleEmailChange = (e) => {
-    const input = e.target.value;
     const validEmail = email.isValid(input);
     this.setState({ email: input, validEmail });
     this.clearErrorState();
